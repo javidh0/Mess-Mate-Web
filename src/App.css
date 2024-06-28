@@ -4,6 +4,32 @@
     font-family: 'Poppins', sans-serif;
 }
 
+.options {
+    border-radius: 10px;
+    padding: 10px;
+    position: absolute;
+    right: 10px;
+    box-shadow: grey 1px 1px 10px;
+}
+
+.profile-button {
+    margin-right: 10px;
+    display: flex;
+    flex-direction: row;
+    padding: 15px 15px;
+    background-color: "white";
+    border-radius: 50%;
+    border: #FA8072 solid 2px;
+}
+
+nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+}
+
 h1 {
     font-size: 3.5em;
 }
@@ -13,41 +39,8 @@ h2 {
     font-size: 2em;
 }
 
-.login-page {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-
-#app-name, #form-div {
-    width: 50vw;
-    height: 100vh;
-    text-align: center;
-}
-
-#app-name * {
-    margin-top: 40vh;
-    color: #fffff0;
-}
-
-#app-name { 
-    /* 004080  FFD700*/
-    background-color: #FA8072;
-    width: 50vw;
-    height: 100vh;
-}
-
-#form-div {
-    background-color: #fffff0;
-}
-
-#input-fields {
-    display: flex;
-    flex-direction: column;
-    margin: 20px;
-    margin-top: 25vh;
-    align-items: center;
-    
+h3 {
+    padding: 10px;
 }
 
 input {
@@ -76,4 +69,13 @@ button {
 
 button:active {
     transform: translateY(1px) translateX(1px);
-  }
+}
+
+a {
+    all: unset;
+}
+
+span {
+    color: #FA8072;
+    font-weight: bold;
+}
