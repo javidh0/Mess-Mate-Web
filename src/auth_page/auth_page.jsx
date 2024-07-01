@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import "./app.css";
+import "../app.css";
 import "./auth_page.css";
 import { Link } from "react-router-dom";
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import {LoginPage, SignUp} from './auth_page';
-import Home from './home';
+import {LoginPage, SignUp} from './auth_page/auth_page';
+import Home from './home/home';
 
 import {
   createBrowserRouter,

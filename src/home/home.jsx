@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { RiContactsLine } from "react-icons/ri";
 import { IoMdMenu } from "react-icons/io";
 import "./home.css";
-import "./app.css";
+import "../app.css"
 
 function Options(){
     function MouseOverHandle() {
