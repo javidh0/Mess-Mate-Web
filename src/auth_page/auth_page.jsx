@@ -3,6 +3,7 @@ import { useState } from "react";
 import "../app.css";
 import "./auth_page.css";
 import { Link } from "react-router-dom";
+import loginApi from "./api";
 
 function SignUp(){
     const [buttonStyle, setStyle] = useState(
@@ -58,6 +59,11 @@ function LoginPage(){
     };
     const ButtonStyle = {backgroundColor: "#fffff0"}; 
 
+    async function onClick(){
+        let x = await loginApi();
+        console.log(x);
+    }
+
     return (
         <div className="login-page">
             <div id="app-name">
@@ -68,14 +74,15 @@ function LoginPage(){
                     <h2>Log In</h2>
                     <input type="text" placeholder="Email"/>
                     <input type="password" placeholder="Password"/>
-                    <Link to="/">
+                    {/* <Link to="/"> */}
                         <button
                             onMouseOver={e => {setStyle(onHoverButtonStyle)}}
                             onMouseLeave={e => {setStyle(ButtonStyle)}}
+                            onClick={onClick}
                             style={buttonStyle}>
                                 Log In
                         </button>
-                    </Link>
+                    {/* </Link> */}
                     <p id="sign-up">Do not have a account? <span><Link to="/signup">Log In</Link></span></p>
                 </div>
             </div>
