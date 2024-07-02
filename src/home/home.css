@@ -1,0 +1,63 @@
+.card {
+    margin: 20px;
+
+    width: 200px;
+    border-radius: 10px;
+    box-shadow: 1px 1px 10px grey;
+}
+
+img {
+    width: 200px;
+    border-radius: 10px 10px 0px 0px;
+    margin: 0px;
+}
+
+h4 {
+    text-align: center;
+}
+
+.card div {
+    padding: 15px;
+    text-align: center;
+
+}
+
+.Scroll {
+    display: flex;
+    flex-direction: row;
+    overflow-x: scroll;
+}
+
+.Scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.menu-display p{
+    padding-left: 20px;
+}
+
+.time {
+    display: flex;
+    flex-direction: row;
+    overflow-x: scroll;
+    justify-content: center;
+}
+
+.time::-webkit-scrollbar {
+    display: none;
+}
+
+.time div{
+    font-size: large;
+    text-align: center;
+    /* background-color: blue; */
+    margin: 10px;
+    min-width: 100px;
+    padding: 5px;
+}
+
+#time-select {
+    background-color: #FA8072;
+    border-radius: 5px;
+    font-weight: bold;
+}
