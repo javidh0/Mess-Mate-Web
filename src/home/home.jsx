@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { RiContactsLine } from "react-icons/ri";
+import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
 import "./home.css";
 import "../app.css"
 
@@ -24,13 +25,23 @@ function builder(n) {
 }
 
 function MenuDisplay(props) {
+
+    const [open, setOpen] = useState(props.open);
+    const [style, setStyle] = useState({});
+
+    function onClickHandle(){
+        setOpen(!open);
+        setStyle({});
+    }
+
     return (
         <div className="menu-display">
-            <h2>Today's Breakfast</h2>
-            <p>Time : 7:00am - 9:00am</p>
-            <div className="Scroll">
-                {builder(10)}
-            </div>
+            <h2 onClick={onClickHandle}> 
+                {open ? <IoMdArrowDropup /> : <IoMdArrowDropdown /> }
+                {props.day} {props.name}
+            </h2>
+            {open && <p className="fade-in">Time : {props.time}</p>}
+            {open && <div className="Scroll fade-in" style={style}> {builder(10)} </div>}
         </div>
     )
 }
@@ -101,24 +112,52 @@ function dayBuilder(day, setDay){
 }
 
 function Home(){
-    const [day, setDay] = useState(0);
+    let date = new Date();
+
+    const [day, setDay] = useState(date.getDay());
     const [disOptions, setDisOptions] = useState(false);
+    const days = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday"
+    ];
 
     function optionsToogle() {
         setDisOptions(!disOptions);
+    }
+
+
+    function myGetDay() {
+        let x = date.getDay();
+        if(date.getDay() == day) return "Today's";
+        return days[day];
     }
 
     return (
         <div className="home">
             <nav>
                 <h3>Mess Mate</h3>
-                <Profile optionsToogle = {optionsToogle} />
+                <Profile optionsToogle = {optionsToogle}/>
             </nav>
             {disOptions && <Options/>}
             <div className="time">
-                {dayBuilder(day, setDay)}
+                <div onClick={() => setDay(0)} id={day == 0 ? "time-select":""}><p>{days[0]}</p></div> 
+                <div onClick={() => setDay(1)} id={day == 1 ? "time-select":""}><p>{days[1]}</p></div>
+                <div onClick={() => setDay(2)} id={day == 2 ? "time-select":""}><p>{days[2]}</p></div>
+                <div onClick={() => setDay(3)} id={day == 3 ? "time-select":""}><p>{days[3]}</p></div>
+                <div onClick={() => setDay(4)} id={day == 4 ? "time-select":""}><p>{days[4]}</p></div>
+                <div onClick={() => setDay(5)} id={day == 5 ? "time-select":""}><p>{days[5]}</p></div>
+                <div onClick={() => setDay(6)} id={day == 6 ? "time-select":""}><p>{days[6]}</p></div>
             </div>
-            <MenuDisplay/>
+            <MenuDisplay open day={myGetDay()} name = "Breakfast" time="7:00am - 9:00am"/>
+            <MenuDisplay day={myGetDay()} name = "Lunch" time="7:00am - 9:00am"/>
+            <MenuDisplay day={myGetDay()} name = "Snack" time="7:00am - 9:00am"/>
+            <MenuDisplay day={myGetDay()} name = "Dinner" time="7:00am - 9:00am"/>
+
             
         </div>
     );

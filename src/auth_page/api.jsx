@@ -7,6 +7,8 @@ import axios from "axios";
 //     }
 // }
 
+const api_root = "http://localhost:1729/";
+
 async function loginApi(){
     var body = {
         headers: {
@@ -20,7 +22,7 @@ async function loginApi(){
     };
 
     let x = await axios.post(
-        "http://localhost:1729/login",
+        api_root+"login",
         body
     );
 

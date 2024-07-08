@@ -1,6 +1,5 @@
 .card {
     margin: 20px;
-
     width: 200px;
     border-radius: 10px;
     box-shadow: 1px 1px 10px grey;
@@ -19,17 +18,61 @@ h4 {
 .card div {
     padding: 15px;
     text-align: center;
-
 }
+
+.fade-in {
+    animation: fadeIn 1s;
+    -webkit-animation: fadeIn 1s;
+    -moz-animation: fadeIn 5s;
+    -o-animation: fadeIn 5s;
+    -ms-animation: fadeIn 5s;
+  }
+  
+  @keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  
+  @-moz-keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  
+  @-webkit-keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  
+  @-o-keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  
+  @-ms-keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
 
 .Scroll {
     display: flex;
     flex-direction: row;
     overflow-x: scroll;
+    transition: all 1s;
 }
 
 .Scroll::-webkit-scrollbar {
     display: none;
+}
+
+.menu-display {
+    margin: 20px;
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px grey;
+    padding: 0px 10px 0px 10px;
+}
+
+.menu-display {
+    transition: "all 1s";
 }
 
 .menu-display p{
@@ -50,10 +93,12 @@ h4 {
 .time div{
     font-size: large;
     text-align: center;
-    /* background-color: blue; */
+    border-radius: 5px;
     margin: 10px;
-    min-width: 100px;
+    min-width: 120px;
     padding: 5px;
+    box-shadow: 1px 1px 5px grey;
+
 }
 
 #time-select {
