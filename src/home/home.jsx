@@ -3,6 +3,7 @@ import { RiContactsLine } from "react-icons/ri";
 import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
 import "./home.css";
 import "../app.css"
+import { useNavigate } from "react-router-dom";
 
 function MenuCard(props) {
     return (
@@ -50,17 +51,18 @@ function MenuEachDay(props) {
     
 }
 
-function Options(){
+function Options(props){
     function MouseOverHandle() {
     }
     function MouseLeaveHandle() {       
     }
+    
     return (
         <div className="options" onMouseOver={MouseOverHandle} onMouseLeave={MouseLeaveHandle}>
             <p>Thing</p>
             <p>Something</p>
             <p>-----------</p>
-            <p>Log Out</p>
+            <p onClick={() => {props.logout()}}>Log Out</p>
         </div>
     )
 }
@@ -111,11 +113,20 @@ function dayBuilder(day, setDay){
     return tr;
 }
 
-function Home(){
+function Home(props){
+    const navigate = useNavigate();
+
     let date = new Date();
 
     const [day, setDay] = useState(date.getDay());
+    const [login, setLogin] = useState(true);
     const [disOptions, setDisOptions] = useState(false);
+
+    useEffect(() => {if(!props.login['status']) {
+        navigate("/login");
+    }}, []);
+
+
     const days = [
         "Sunday",
         "Monday",
@@ -125,6 +136,7 @@ function Home(){
         "Friday",
         "Saturday"
     ];
+    
 
     function optionsToogle() {
         setDisOptions(!disOptions);
@@ -137,13 +149,21 @@ function Home(){
         return days[day];
     }
 
+    function logout() {
+        props.setLogin({
+            "status" : false,
+            "auth" : {}
+        })
+        navigate("/login");
+    }
+
     return (
         <div className="home">
             <nav>
                 <h3>Mess Mate</h3>
                 <Profile optionsToogle = {optionsToogle}/>
             </nav>
-            {disOptions && <Options/>}
+            {disOptions && <Options logout = {logout}/>}
             <div className="time">
                 <div onClick={() => setDay(0)} id={day == 0 ? "time-select":""}><p>{days[0]}</p></div> 
                 <div onClick={() => setDay(1)} id={day == 1 ? "time-select":""}><p>{days[1]}</p></div>
