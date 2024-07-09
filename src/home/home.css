@@ -5,6 +5,10 @@
     box-shadow: 1px 1px 10px grey;
 }
 
+.options {
+    background-color: white;
+}
+
 img {
     width: 200px;
     border-radius: 10px 10px 0px 0px;
