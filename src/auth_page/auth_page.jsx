@@ -45,7 +45,9 @@ function SignUp(){
     );
 }
 
+
 function LoginPage(){
+    const [cred, setCred] = useState({});
     const [buttonStyle, setStyle] = useState(
         {backgroundColor: "#fffff0"}
     )
@@ -60,8 +62,18 @@ function LoginPage(){
     const ButtonStyle = {backgroundColor: "#fffff0"}; 
 
     async function onClick(){
-        let x = await loginApi();
+        let x = await loginApi(cred['user_id'], cred['password']);
+        if(x['status'] != 200){
+            
+        }
         console.log(x);
+    }
+
+    function onChanged(e){
+        var temp = cred;
+        if(e.target.name == 'email') temp['user_id'] = e.target.value;
+        if(e.target.name == 'pass') temp['password'] = e.target.value;
+        setCred(temp)
     }
 
     return (
@@ -72,8 +84,8 @@ function LoginPage(){
             <div id="form-div">
                 <div id="input-fields">
                     <h2>Log In</h2>
-                    <input type="text" placeholder="Email"/>
-                    <input type="password" placeholder="Password"/>
+                    <input value={cred['user_id']} onChange={onChanged} name="email" type="text" placeholder="Email"/>
+                    <input value={cred['password']} onChange={onChanged} name="pass" type="password" placeholder="Password"/>
                     {/* <Link to="/"> */}
                         <button
                             onMouseOver={e => {setStyle(onHoverButtonStyle)}}
