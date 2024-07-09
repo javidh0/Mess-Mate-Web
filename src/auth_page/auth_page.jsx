@@ -1,8 +1,8 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../app.css";
 import "./auth_page.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import loginApi from "./api";
 
 function SignUp(){
@@ -45,8 +45,9 @@ function SignUp(){
     );
 }
 
-
-function LoginPage(){
+function LoginPage(props){
+    console.log(props.login);
+    const navigate = useNavigate();
     const [cred, setCred] = useState({});
     const [buttonStyle, setStyle] = useState(
         {backgroundColor: "#fffff0"}
@@ -63,17 +64,29 @@ function LoginPage(){
 
     async function onClick(){
         let x = await loginApi(cred['user_id'], cred['password']);
-        if(x['status'] != 200){
-            
+        if(x['status'] == 200) {
+            props.setLogin(
+                {
+                    "status" : true,
+                    "auth" : x
+                }
+            )
+            navigate("/");
         }
         console.log(x);
     }
 
-    function onChanged(e){
+    function setEmail(e) {
         var temp = cred;
-        if(e.target.name == 'email') temp['user_id'] = e.target.value;
-        if(e.target.name == 'pass') temp['password'] = e.target.value;
-        setCred(temp)
+        temp['user_id'] = e.target.value;
+        setCred(temp);
+        console.log(cred);
+    }
+    function setPassword(e) {
+        var temp = cred;
+        temp['password'] = e.target.value;
+        setCred(temp);
+        console.log(cred);
     }
 
     return (
@@ -84,17 +97,17 @@ function LoginPage(){
             <div id="form-div">
                 <div id="input-fields">
                     <h2>Log In</h2>
-                    <input value={cred['user_id']} onChange={onChanged} name="email" type="text" placeholder="Email"/>
-                    <input value={cred['password']} onChange={onChanged} name="pass" type="password" placeholder="Password"/>
-                    {/* <Link to="/"> */}
-                        <button
-                            onMouseOver={e => {setStyle(onHoverButtonStyle)}}
-                            onMouseLeave={e => {setStyle(ButtonStyle)}}
-                            onClick={onClick}
-                            style={buttonStyle}>
-                                Log In
-                        </button>
-                    {/* </Link> */}
+                    <input onChange={setEmail} type="text" placeholder="Email"/>
+                    <input onChange={setPassword} type="password" placeholder="Password"/>
+                    
+                    <button
+                        onMouseOver={e => {setStyle(onHoverButtonStyle)}}
+                        onMouseLeave={e => {setStyle(ButtonStyle)}}
+                        onClick={onClick}
+                        style={buttonStyle}>
+                            Log In
+                    </button>
+
                     <p id="sign-up">Do not have a account? <span><Link to="/signup">Log In</Link></span></p>
                 </div>
             </div>
