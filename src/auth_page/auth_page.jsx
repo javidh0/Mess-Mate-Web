@@ -3,9 +3,12 @@ import { useState, useEffect } from "react";
 import "../app.css";
 import "./auth_page.css";
 import { Link, useNavigate } from "react-router-dom";
-import loginApi from "./api";
+import {loginApi, signUpApi} from "./api";
 
 function SignUp(){
+    const [error, setError] = useState([false, "-"]);
+    const naviagte = useNavigate();
+    const [data, setdata] = useState({});
     const [buttonStyle, setStyle] = useState(
         {backgroundColor: "#fffff0"}
     )
@@ -19,25 +22,55 @@ function SignUp(){
     };
     const ButtonStyle = {backgroundColor: "#fffff0"}; 
 
+    async function signUp(){
+        try{
+            let x = await signUpApi(data);
+            naviagte("/login");
+        }
+        catch(e){
+            var temp = e['response'];
+            console.log(temp['error']);
+            if(temp['status'] == 422) setError([true, temp['data']['error']])
+            else setError([true, 'Unknown Error'])
+        }
+    }
+
+    function onChange(e){
+        var temp = data;
+        var field = e.target.name;
+        var val = e.target.value;
+
+        if(field == 'user_name') temp['user_name'] = val;
+        else if(field == 'user_id') temp['user_id'] = val;
+        else if(field == 'password') temp['password'] = val;
+        else if(field == 'email') temp['email'] = val;
+
+        setdata(temp);
+    }
+
     return (
         <div className="login-page">
             <div id="app-name">
                 <h1>Mess Mate</h1>
             </div>
             <div id="form-div">
-                <div id="input-fields">
+                <div id="input-fields" style={{"marginTop" : "15vh"}}>
                     <h2>Sign Up</h2>
-                    <input type="text" placeholder="User Name"/>
-                    <input type="text" placeholder="Email"/>
-                    <input type="password" placeholder="Password"/>
-                    <Link to="/">
-                        <button
-                            onMouseOver={e => {setStyle(onHoverButtonStyle)}}
-                            onMouseLeave={e => {setStyle(ButtonStyle)}}
-                            style={buttonStyle}>
-                                Sign Up
-                        </button>
-                    </Link>
+                    <input onChange={onChange} name="user_name" type="text" placeholder="User Name"/>
+                    <input onChange={onChange} name="user_id" type="text" placeholder="User Id"/>
+                    <input onChange={onChange} name="email" type="text" placeholder="Email"/>
+                    <input onChange={onChange} name="password" type="password" placeholder="Password"/>
+
+                    {error[0] && <p style={{color:"red"}}>{error[1]}</p>}
+                    
+                    <button
+                        onClick={signUp}
+                        onMouseOver={e => {setStyle(onHoverButtonStyle)}}
+                        onMouseLeave={e => {setStyle(ButtonStyle)}}
+                        style={buttonStyle}>
+                            Sign Up
+                    </button>
+                    
                     <p id="sign-up">Already have a account? <span><Link to="/login">Log In</Link></span></p>
                 </div>
             </div>
@@ -46,7 +79,7 @@ function SignUp(){
 }
 
 function LoginPage(props){
-    console.log(props.login);
+    const [error, setError] = useState(false);
     const navigate = useNavigate();
     const [cred, setCred] = useState({});
     const [buttonStyle, setStyle] = useState(
@@ -63,17 +96,21 @@ function LoginPage(props){
     const ButtonStyle = {backgroundColor: "#fffff0"}; 
 
     async function onClick(){
-        let x = await loginApi(cred['user_id'], cred['password']);
-        if(x['status'] == 200) {
+        try{
+            let x = await loginApi(cred['user_id'], cred['password']);
+            
             props.setLogin(
                 {
                     "status" : true,
                     "auth" : x
                 }
             )
+            console.log(props.login)
             navigate("/");
+            
+        }catch(e){
+            setError(true);
         }
-        console.log(x);
     }
 
     function setEmail(e) {
@@ -99,6 +136,8 @@ function LoginPage(props){
                     <h2>Log In</h2>
                     <input onChange={setEmail} type="text" placeholder="Email"/>
                     <input onChange={setPassword} type="password" placeholder="Password"/>
+
+                    {error && <p style={{color:"red"}}> Invalid Credentials</p>}
                     
                     <button
                         onMouseOver={e => {setStyle(onHoverButtonStyle)}}
@@ -108,7 +147,7 @@ function LoginPage(props){
                             Log In
                     </button>
 
-                    <p id="sign-up">Do not have a account? <span><Link to="/signup">Log In</Link></span></p>
+                    <p id="sign-up">Do not have a account? <span><Link to="/signup">Sign In</Link></span></p>
                 </div>
             </div>
         </div>
