@@ -7,6 +7,15 @@ import axios from "axios";
 //     }
 // }
 
+// {
+//     "data" : {
+//         "user_id" : "jj7707",
+//         "password" : "pass",
+//         "user_name" : "Javidh",
+//         "email" : "jj7707@gmail.com"
+//     }
+// }
+
 const api_root = "http://localhost:1729/";
 
 async function loginApi(user_id, password){
@@ -21,14 +30,26 @@ async function loginApi(user_id, password){
         }
     };
 
-    console.log(body);
 
     let x = await axios.post(
         api_root+"login",
         body
     );
 
-    return x;
+    return x.data;
 }
 
-export default loginApi;
+async function signUpApi(data){
+    var body = {
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+        },
+        "data" : data
+    };
+    
+    let x = await axios.post(api_root+"new_user", body);
+    return x.data;
+}
+
+export {signUpApi, loginApi};
