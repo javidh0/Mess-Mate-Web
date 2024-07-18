@@ -4,6 +4,7 @@ import "../app.css";
 import "./auth_page.css";
 import { Link, useNavigate } from "react-router-dom";
 import {loginApi, signUpApi} from "./api";
+import {login, setLogin} from "../auth_data/auth_data";
 
 function SignUp(){
     const [error, setError] = useState([false, "-"]);
@@ -99,13 +100,13 @@ function LoginPage(props){
         try{
             let x = await loginApi(cred['user_id'], cred['password']);
             
-            props.setLogin(
+            setLogin(
                 {
                     "status" : true,
                     "auth" : x
                 }
             )
-            console.log(props.login)
+            console.log(login)
             navigate("/");
             
         }catch(e){
