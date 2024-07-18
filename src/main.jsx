@@ -16,20 +16,10 @@ function TopRoot() {
   //   auth : {}
   // });
 
-  let login = {
-    status : false,
-    auth : {},
-  };
-
-  function setLogin(val) {
-    login["status"] = val["status"];
-    login["auth"] = val["auth"];
-  }
-
   const router = createBrowserRouter([
     {
       path: "/login",
-      element: <LoginPage login = {login} setLogin = {setLogin} />,
+      element: <LoginPage/>,
     },
     {
       path: "/signup",
@@ -37,7 +27,7 @@ function TopRoot() {
     },
     {
       path : "/",
-      element: <Home login = {login} setLogin = {setLogin}/>
+      element: <Home/>
     }
   ]);
 
