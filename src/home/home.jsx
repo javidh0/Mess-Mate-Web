@@ -4,11 +4,13 @@ import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
 import "./home.css";
 import "../app.css"
 import { useNavigate } from "react-router-dom";
+import {login, setLogin} from "../auth_data/auth_data";
+import { getFoodByDay, getFoodById } from "./api";
 
 function MenuCard(props) {
     return (
         <div className="card">
-            <img src="https://www.indianhealthyrecipes.com/wp-content/uploads/2023/06/brown-rice-dosa-recipe.jpg" alt="" />
+            <img src="https://firebasestorage.googleapis.com/v0/b/srm-mess-app.appspot.com/o/mess-mate-web-img%2Fdosa.jpg?alt=media&token=c074201e-698e-48b8-986e-41178eb72819" alt="" />
             <div>
                 <h4>{props.name}</h4>
                 <p>Overall Rating {props.rate}</p>
@@ -17,23 +19,40 @@ function MenuCard(props) {
     );
 }
 
-function builder(n) {
+async function builder(lstOfFoods) {
     let tr = [];
+    let n = lstOfFoods.length;
+    console.log(lstOfFoods);
+    console.log(n);
+
     for(var i=0; i<n; i++) {
-        tr.push(<MenuCard name="Dosa" rate="4.5"/>);
+        let id = lstOfFoods[i];
+        let temp = await getFoodById(id, login['auth']['token']);
+        tr.push(<MenuCard name={temp['name']} rate="4.5"/>);
     }
     return tr;
 }
 
 function MenuDisplay(props) {
 
+    console.log("Menu display");
     const [open, setOpen] = useState(props.open);
     const [style, setStyle] = useState({});
+    const [builds, setBuilds] = useState([]);
+
 
     function onClickHandle(){
         setOpen(!open);
         setStyle({});
     }
+
+    useEffect(() => {
+        async function util(){
+            let x = await builder(props.lstOfFoods);
+            setBuilds(x);
+        };
+        util();
+    }, []);
 
     return (
         <div className="menu-display">
@@ -42,7 +61,7 @@ function MenuDisplay(props) {
                 {props.day} {props.name}
             </h2>
             {open && <p className="fade-in">Time : {props.time}</p>}
-            {open && <div className="Scroll fade-in" style={style}> {builder(10)} </div>}
+            {open && <div className="Scroll fade-in" style={style}> {builds} </div>}
         </div>
     )
 }
@@ -113,16 +132,16 @@ function dayBuilder(day, setDay){
     return tr;
 }
 
-function Home(props){
+function Home(){
     const navigate = useNavigate();
 
     let date = new Date();
 
     const [day, setDay] = useState(date.getDay());
-    const [login, setLogin] = useState(true);
     const [disOptions, setDisOptions] = useState(false);
+    const [lstOfFoods, setLstOfFoods] = useState([]);
 
-    useEffect(() => {if(!props.login['status']) {
+    useEffect(() => {if(!login['status']) {
         navigate("/login");
     }}, []);
 
@@ -150,12 +169,20 @@ function Home(props){
     }
 
     function logout() {
-        props.setLogin({
+        setLogin({
             "status" : false,
             "auth" : {}
         })
         navigate("/login");
     }
+
+    useEffect(() => {
+        async function apiUtil(){
+            let temp = await getFoodByDay(day, login['auth']['token']);
+            setLstOfFoods(temp['ids']);
+        }
+        apiUtil();
+    }, [day]);
 
     return (
         <div className="home">
@@ -173,12 +200,10 @@ function Home(props){
                 <div onClick={() => setDay(5)} id={day == 5 ? "time-select":""}><p>{days[5]}</p></div>
                 <div onClick={() => setDay(6)} id={day == 6 ? "time-select":""}><p>{days[6]}</p></div>
             </div>
-            <MenuDisplay open day={myGetDay()} name = "Breakfast" time="7:00am - 9:00am"/>
-            <MenuDisplay day={myGetDay()} name = "Lunch" time="7:00am - 9:00am"/>
-            <MenuDisplay day={myGetDay()} name = "Snack" time="7:00am - 9:00am"/>
-            <MenuDisplay day={myGetDay()} name = "Dinner" time="7:00am - 9:00am"/>
-
-            
+            <MenuDisplay dummy = {day} lstOfFoods = {lstOfFoods} open day={myGetDay()} name = "Breakfast" time="7:00am - 9:00am"/>
+            <MenuDisplay dummy = {day} lstOfFoods = {lstOfFoods} day={myGetDay()} name = "Lunch" time="7:00am - 9:00am"/>
+            <MenuDisplay dummy = {day} lstOfFoods = {lstOfFoods} day={myGetDay()} name = "Snack" time="7:00am - 9:00am"/>
+            <MenuDisplay dummy = {day} lstOfFoods = {lstOfFoods} day={myGetDay()} name = "Dinner" time="7:00am - 9:00am"/>
         </div>
     );
 }
