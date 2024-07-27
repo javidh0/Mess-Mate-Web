@@ -34,15 +34,16 @@ async function builder(lstOfFoods) {
 }
 
 function MenuDisplay(props) {
-
-    console.log("Menu display");
-    const [open, setOpen] = useState(props.open);
+    console.log("menu");
+    const open = props.open; 
+    const setOpen = props.setOpen;
     const [style, setStyle] = useState({});
     const [builds, setBuilds] = useState([]);
 
 
     function onClickHandle(){
-        setOpen(!open);
+        if(open == false) setOpen(true);
+        else setOpen(false);
         setStyle({});
     }
 
@@ -54,14 +55,23 @@ function MenuDisplay(props) {
         util();
     }, []);
 
+    useEffect(() => {
+        async function util(){
+            
+            let x = await builder(props.lstOfFoods);
+            setBuilds(x);
+        };
+        util();
+    }, [open]);
+
     return (
         <div className="menu-display">
             <h2 onClick={onClickHandle}> 
-                {open ? <IoMdArrowDropup /> : <IoMdArrowDropdown /> }
+                {open == true ? <IoMdArrowDropup /> : <IoMdArrowDropdown /> }
                 {props.day} {props.name}
             </h2>
-            {open && <p className="fade-in">Time : {props.time}</p>}
-            {open && <div className="Scroll fade-in" style={style}> {builds} </div>}
+            {open == true && <p className="fade-in">Time : {props.time}</p>}
+            {open == true && <div className="Scroll fade-in" style={style}> {builds} </div>}
         </div>
     )
 }
@@ -140,6 +150,7 @@ function Home(){
     const [day, setDay] = useState(date.getDay());
     const [disOptions, setDisOptions] = useState(false);
     const [lstOfFoods, setLstOfFoods] = useState([]);
+    const [dropDownOpens, setDropDownOpens] = useState([false, false, false, false]);
 
     useEffect(() => {if(!login['status']) {
         navigate("/login");
@@ -161,6 +172,11 @@ function Home(){
         setDisOptions(!disOptions);
     }
 
+    function setOpenHandles(idx, val){
+        var temp = [...dropDownOpens];
+        temp[idx] = val;
+        setDropDownOpens(temp);
+    }
 
     function myGetDay() {
         let x = date.getDay();
@@ -178,6 +194,7 @@ function Home(){
 
     useEffect(() => {
         async function apiUtil(){
+            setDropDownOpens([false, false, false, false]);
             let temp = await getFoodByDay(day, login['auth']['token']);
             setLstOfFoods(temp['ids']);
         }
@@ -200,10 +217,10 @@ function Home(){
                 <div onClick={() => setDay(5)} id={day == 5 ? "time-select":""}><p>{days[5]}</p></div>
                 <div onClick={() => setDay(6)} id={day == 6 ? "time-select":""}><p>{days[6]}</p></div>
             </div>
-            <MenuDisplay dummy = {day} lstOfFoods = {lstOfFoods} open day={myGetDay()} name = "Breakfast" time="7:00am - 9:00am"/>
-            <MenuDisplay dummy = {day} lstOfFoods = {lstOfFoods} day={myGetDay()} name = "Lunch" time="7:00am - 9:00am"/>
-            <MenuDisplay dummy = {day} lstOfFoods = {lstOfFoods} day={myGetDay()} name = "Snack" time="7:00am - 9:00am"/>
-            <MenuDisplay dummy = {day} lstOfFoods = {lstOfFoods} day={myGetDay()} name = "Dinner" time="7:00am - 9:00am"/>
+            <MenuDisplay lstOfFoods = {lstOfFoods} open = {dropDownOpens[0]} setOpen = {(val) => {setOpenHandles(0, val)}} day_menu={myGetDay()} name = "Breakfast" time="7:00am - 9:00am"/>
+            <MenuDisplay lstOfFoods = {lstOfFoods} open = {dropDownOpens[1]} setOpen = {(val) => {setOpenHandles(1, val)}} day_menu={myGetDay()} name = "Lunch" time="7:00am - 9:00am"/>
+            <MenuDisplay lstOfFoods = {lstOfFoods} open = {dropDownOpens[2]} setOpen = {(val) => {setOpenHandles(2, val)}} day_menu={myGetDay()} name = "Snack" time="7:00am - 9:00am"/>
+            <MenuDisplay lstOfFoods = {lstOfFoods} open = {dropDownOpens[3]} setOpen = {(val) => {setOpenHandles(3, val)}} day_menu={myGetDay()} name = "Dinner" time="7:00am - 9:00am"/>
         </div>
     );
 }
