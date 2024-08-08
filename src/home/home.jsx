@@ -5,7 +5,7 @@ import "./home.css";
 import "../app.css"
 import { useNavigate } from "react-router-dom";
 import {login, setLogin} from "../auth_data/auth_data";
-import { getFoodByDay, getFoodById } from "./api";
+import { getFoodByDay, getFoodById, getFoodByDayMeal } from "./api";
 
 function MenuCard(props) {
     return (
@@ -22,24 +22,20 @@ function MenuCard(props) {
 async function builder(lstOfFoods) {
     let tr = [];
     let n = lstOfFoods.length;
-    console.log(lstOfFoods);
-    console.log(n);
 
     for(var i=0; i<n; i++) {
         let id = lstOfFoods[i];
         let temp = await getFoodById(id, login['auth']['token']);
-        tr.push(<MenuCard name={temp['name']} rate="4.5"/>);
+        tr.push(<MenuCard name={temp['name']} rate={temp['rating']}/>);
     }
     return tr;
 }
 
 function MenuDisplay(props) {
-    console.log("menu");
     const open = props.open; 
     const setOpen = props.setOpen;
     const [style, setStyle] = useState({});
     const [builds, setBuilds] = useState([]);
-
 
     function onClickHandle(){
         if(open == false) setOpen(true);
@@ -57,7 +53,6 @@ function MenuDisplay(props) {
 
     useEffect(() => {
         async function util(){
-            
             let x = await builder(props.lstOfFoods);
             setBuilds(x);
         };
@@ -74,10 +69,6 @@ function MenuDisplay(props) {
             {open == true && <div className="Scroll fade-in" style={style}> {builds} </div>}
         </div>
     )
-}
-
-function MenuEachDay(props) {
-    
 }
 
 function Options(props){
@@ -129,19 +120,6 @@ function Profile(props){
     )
 }
 
-function dayBuilder(day, setDay){
-    let date = new Date();
-    let tr = [];
-    for(var i=0; i<7; i++){
-        tr.push(
-            <div onClick={() => setDay(i)} id={day == i ? "time-select":""}><p>{date.getDay()}</p></div>
-        );
-        date.setDate(date.getDate() + 1);
-    }
-
-    return tr;
-}
-
 function Home(){
     const navigate = useNavigate();
 
@@ -150,6 +128,12 @@ function Home(){
     const [day, setDay] = useState(date.getDay());
     const [disOptions, setDisOptions] = useState(false);
     const [lstOfFoods, setLstOfFoods] = useState([]);
+
+    const [breakFast, setBreakFast] = useState([]);
+    const [lunch, setLunch] = useState([]);
+    const [snack, setSnack] = useState([]);
+    const [dinner, setDinner] = useState([]);
+
     const [dropDownOpens, setDropDownOpens] = useState([false, false, false, false]);
 
     useEffect(() => {if(!login['status']) {
@@ -195,8 +179,11 @@ function Home(){
     useEffect(() => {
         async function apiUtil(){
             setDropDownOpens([false, false, false, false]);
-            let temp = await getFoodByDay(day, login['auth']['token']);
-            setLstOfFoods(temp['ids']);
+            let temp;
+            temp = await getFoodByDayMeal(day, 0, login['auth']['token']); setBreakFast(temp['ids']);
+            temp = await getFoodByDayMeal(day, 1, login['auth']['token']); setLunch(temp['ids']);
+            temp = await getFoodByDayMeal(day, 2, login['auth']['token']); setSnack(temp['ids']);
+            temp = await getFoodByDayMeal(day, 3, login['auth']['token']); setDinner(temp['ids']);
         }
         apiUtil();
     }, [day]);
@@ -217,10 +204,10 @@ function Home(){
                 <div onClick={() => setDay(5)} id={day == 5 ? "time-select":""}><p>{days[5]}</p></div>
                 <div onClick={() => setDay(6)} id={day == 6 ? "time-select":""}><p>{days[6]}</p></div>
             </div>
-            <MenuDisplay lstOfFoods = {lstOfFoods} open = {dropDownOpens[0]} setOpen = {(val) => {setOpenHandles(0, val)}} day_menu={myGetDay()} name = "Breakfast" time="7:00am - 9:00am"/>
-            <MenuDisplay lstOfFoods = {lstOfFoods} open = {dropDownOpens[1]} setOpen = {(val) => {setOpenHandles(1, val)}} day_menu={myGetDay()} name = "Lunch" time="7:00am - 9:00am"/>
-            <MenuDisplay lstOfFoods = {lstOfFoods} open = {dropDownOpens[2]} setOpen = {(val) => {setOpenHandles(2, val)}} day_menu={myGetDay()} name = "Snack" time="7:00am - 9:00am"/>
-            <MenuDisplay lstOfFoods = {lstOfFoods} open = {dropDownOpens[3]} setOpen = {(val) => {setOpenHandles(3, val)}} day_menu={myGetDay()} name = "Dinner" time="7:00am - 9:00am"/>
+            <MenuDisplay lstOfFoods = {breakFast} open = {dropDownOpens[0]} setOpen = {(val) => {setOpenHandles(0, val)}} day_menu={myGetDay()} name = "Breakfast" time="7:00am - 9:00am"/>
+            <MenuDisplay lstOfFoods = {lunch} open = {dropDownOpens[1]} setOpen = {(val) => {setOpenHandles(1, val)}} day_menu={myGetDay()} name = "Lunch" time="7:00am - 9:00am"/>
+            <MenuDisplay lstOfFoods = {snack} open = {dropDownOpens[2]} setOpen = {(val) => {setOpenHandles(2, val)}} day_menu={myGetDay()} name = "Snack" time="7:00am - 9:00am"/>
+            <MenuDisplay lstOfFoods = {dinner} open = {dropDownOpens[3]} setOpen = {(val) => {setOpenHandles(3, val)}} day_menu={myGetDay()} name = "Dinner" time="7:00am - 9:00am"/>
         </div>
     );
 }
