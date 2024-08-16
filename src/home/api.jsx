@@ -34,7 +34,7 @@ async function getFoodByDay(day, token){
     return temp.data;
 }
 
-async function getFoodById(id, token){
+async function getFoodById(id, user_id, token){
     var body = {
         headers: {
             'Access-Control-Allow-Origin': '*',
@@ -43,7 +43,9 @@ async function getFoodById(id, token){
         }
     };
 
-    var temp = await axios.get(api_root + `id=${id}`, body);
+    const api_root_temp = `http://localhost:1729/food?user_id=${user_id}&id=${id}`;
+
+    var temp = await axios.get(api_root_temp, body);
     
     return temp.data;
 }
