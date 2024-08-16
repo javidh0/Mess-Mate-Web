@@ -13,7 +13,11 @@ function MenuCard(props) {
             <img src="https://firebasestorage.googleapis.com/v0/b/srm-mess-app.appspot.com/o/mess-mate-web-img%2Fdosa.jpg?alt=media&token=c074201e-698e-48b8-986e-41178eb72819" alt="" />
             <div>
                 <h4>{props.name}</h4>
-                <p>Overall Rating {props.rate}</p>
+                <div className="rating-bar">
+                    <p>Rating</p>
+                    <p>{props.rate} ({props.count})</p>
+                </div>
+                {/* <p className="rating-bar">Rating {props.rate} ({props.count})</p> */}
             </div>
         </div>
     );
@@ -25,8 +29,10 @@ async function builder(lstOfFoods) {
 
     for(var i=0; i<n; i++) {
         let id = lstOfFoods[i];
-        let temp = await getFoodById(id, login['auth']['token']);
-        tr.push(<MenuCard name={temp['name']} rate={temp['rating']}/>);
+        let temp = await getFoodById(id, login['auth']['user_id'], login['auth']['token']);
+        let tot_rating = temp['total_rating']['users_ratings'];
+        let rating_cnt = temp['total_rating']['users_count'];
+        tr.push(<MenuCard name={temp['name']} rate={tot_rating} count={rating_cnt}/>);
     }
     return tr;
 }
@@ -127,7 +133,6 @@ function Home(){
 
     const [day, setDay] = useState(date.getDay());
     const [disOptions, setDisOptions] = useState(false);
-    const [lstOfFoods, setLstOfFoods] = useState([]);
 
     const [breakFast, setBreakFast] = useState([]);
     const [lunch, setLunch] = useState([]);
