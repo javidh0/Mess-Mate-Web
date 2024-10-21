@@ -44,7 +44,6 @@ function SignUp(){
         if(field == 'user_name') temp['user_name'] = val;
         else if(field == 'user_id') temp['user_id'] = val;
         else if(field == 'password') temp['password'] = val;
-        else if(field == 'email') temp['email'] = val;
 
         setdata(temp);
     }
@@ -59,7 +58,6 @@ function SignUp(){
                     <h2>Sign Up</h2>
                     <input onChange={onChange} name="user_name" type="text" placeholder="User Name"/>
                     <input onChange={onChange} name="user_id" type="text" placeholder="User Id"/>
-                    <input onChange={onChange} name="email" type="text" placeholder="Email"/>
                     <input onChange={onChange} name="password" type="password" placeholder="Password"/>
 
                     {error[0] && <p style={{color:"red"}}>{error[1]}</p>}

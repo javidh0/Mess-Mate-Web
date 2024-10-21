@@ -20,7 +20,6 @@ async function getFoodByDayMeal(day, meal, token){
     return temp.data;
 }
 
-
 async function getFoodByDay(day, token){
     var body = {
         headers: {
@@ -50,8 +49,22 @@ async function getFoodById(id, user_id, token){
     return temp.data;
 }
 
-async function updateRating(){
+async function updateRating(food_id, user_id, rating, token){
+    var body = {
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+            'Authorization' : `Bearer ${token}`
+        }
+    };
 
+    console.log(body);
+
+    const api_ = `http://localhost:1729/update_rating?food_id=${food_id}&user_id=${user_id}&rating=${rating}`
+
+    var temp = await axios.post(api_, {}, body);
+    
+    return temp.data;
 }
 
-export {getFoodByDay, getFoodById, getFoodByDayMeal};
+export {getFoodByDay, getFoodById, getFoodByDayMeal, updateRating};

@@ -5,16 +5,16 @@ import "./home.css";
 import "../app.css"
 import { useNavigate } from "react-router-dom";
 import {login, setLogin} from "../auth_data/auth_data";
-import { getFoodByDay, getFoodById, getFoodByDayMeal } from "./api";
+import { getFoodByDay, getFoodById, getFoodByDayMeal, updateRating } from "./api";
 import { FaStar, FaRegStar } from "react-icons/fa";
 
 function MenuCard(props) {
     const [select, setSelect] = useState(false);
     const [stars, setStars] = useState(0);
 
-    function onSubmit(){
+    async function onSubmit(){
+        let resp = await updateRating(props.food_id, login['auth']['user_id'], stars, login['auth']['token']);
         setSelect(false);
-        
     }
 
     return (
@@ -30,7 +30,7 @@ function MenuCard(props) {
                         {stars >= 3 ? <FaStar onClick={() => {setStars(3)}} className="FaStar"/> : <FaRegStar onClick={() => {setStars(3)}} className="FaStar"/>}
                         {stars >= 4 ? <FaStar onClick={() => {setStars(4)}} className="FaStar"/> : <FaRegStar onClick={() => {setStars(4)}} className="FaStar"/>}
                         {stars >= 5 ? <FaStar onClick={() => {setStars(5)}} className="FaStar"/> : <FaRegStar onClick={() => {setStars(5)}} className="FaStar"/>}
-                        <span style={{marginLeft:'10px'}}>Submit</span>
+                        <span onClick={() => onSubmit()} style={{marginLeft:'10px'}}>Submit</span>
                     </div>}
                 </div>
             </div>
@@ -47,7 +47,7 @@ async function builder(lstOfFoods) {
         let temp = await getFoodById(id, login['auth']['user_id'], login['auth']['token']);
         let tot_rating = temp['total_rating']['users_ratings'];
         let rating_cnt = temp['total_rating']['users_count'];
-        tr.push(<MenuCard name={temp['name']} rate={tot_rating} count={rating_cnt}/>);
+        tr.push(<MenuCard food_id = {id} name={temp['name']} rate={tot_rating} count={rating_cnt}/>);
     }
     return tr;
 }
