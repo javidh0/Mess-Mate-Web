@@ -50,4 +50,8 @@ async function getFoodById(id, user_id, token){
     return temp.data;
 }
 
+async function updateRating(){
+
+}
+
 export {getFoodByDay, getFoodById, getFoodByDayMeal};

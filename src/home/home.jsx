@@ -6,18 +6,33 @@ import "../app.css"
 import { useNavigate } from "react-router-dom";
 import {login, setLogin} from "../auth_data/auth_data";
 import { getFoodByDay, getFoodById, getFoodByDayMeal } from "./api";
+import { FaStar, FaRegStar } from "react-icons/fa";
 
 function MenuCard(props) {
+    const [select, setSelect] = useState(false);
+    const [stars, setStars] = useState(0);
+
+    function onSubmit(){
+        setSelect(false);
+        
+    }
+
     return (
         <div className="card">
-            <img src="https://firebasestorage.googleapis.com/v0/b/srm-mess-app.appspot.com/o/mess-mate-web-img%2Fdosa.jpg?alt=media&token=c074201e-698e-48b8-986e-41178eb72819" alt="" />
+            <img onClick={() => {setSelect(false)}} src="https://firebasestorage.googleapis.com/v0/b/srm-mess-app.appspot.com/o/mess-mate-web-img%2Fdosa.jpg?alt=media&token=c074201e-698e-48b8-986e-41178eb72819" alt="" />
             <div>
-                <h4>{props.name}</h4>
-                <div className="rating-bar">
-                    <p>Rating</p>
-                    <p>{props.rate} ({props.count})</p>
+                <h4 onClick={() => {setSelect(false)}}>{props.name}</h4>
+                <div onClick={() => {setSelect(true)}} className="rating-bar">
+                    { !select && <p>{props.rate} <FaStar className="FaStar"/>   ({props.count})</p>}
+                    { select && <div className="stars">
+                        {stars >= 1 ? <FaStar onClick={() => {setStars(1)}} className="FaStar"/> : <FaRegStar onClick={() => {setStars(1)}} className="FaStar"/>}
+                        {stars >= 2 ? <FaStar onClick={() => {setStars(2)}} className="FaStar"/> : <FaRegStar onClick={() => {setStars(2)}} className="FaStar"/>}
+                        {stars >= 3 ? <FaStar onClick={() => {setStars(3)}} className="FaStar"/> : <FaRegStar onClick={() => {setStars(3)}} className="FaStar"/>}
+                        {stars >= 4 ? <FaStar onClick={() => {setStars(4)}} className="FaStar"/> : <FaRegStar onClick={() => {setStars(4)}} className="FaStar"/>}
+                        {stars >= 5 ? <FaStar onClick={() => {setStars(5)}} className="FaStar"/> : <FaRegStar onClick={() => {setStars(5)}} className="FaStar"/>}
+                        <span style={{marginLeft:'10px'}}>Submit</span>
+                    </div>}
                 </div>
-                {/* <p className="rating-bar">Rating {props.rate} ({props.count})</p> */}
             </div>
         </div>
     );

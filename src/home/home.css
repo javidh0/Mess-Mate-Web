@@ -5,6 +5,25 @@
     box-shadow: 1px 1px 10px grey;
 }
 
+.small-button {
+    margin: 0px;
+    padding: 0px;
+    font-size: small;
+    border-radius: 10px;
+    border: #FA8072 solid 2px;
+    margin-left: 10px;
+}
+
+.stars {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.FaStar {
+    color: #FBC53F;
+}
+
 .options {
     background-color: white;
 }
@@ -12,8 +31,7 @@
 .rating-bar {
     padding: 0;
     margin: 0;
-    display: flex;
-    justify-content: space-between;
+    align-items: center;
 }
 
 img {
