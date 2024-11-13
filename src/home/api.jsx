@@ -1,6 +1,6 @@
 import axios from "axios";
 
-var api_root = "http://localhost:1729/food?"
+var api_root = "https://mess-app-api-k5iz.vercel.app//food?"
 
 // headers: {'Authorization': `Bearer ${token}`} food_meal
 
@@ -13,7 +13,7 @@ async function getFoodByDayMeal(day, meal, token){
         }
     };
 
-    let api_root_temp = `http://localhost:1729/food_meal?day=${day}&meal=${meal}`; 
+    let api_root_temp = `https://mess-app-api-k5iz.vercel.app/food_meal?day=${day}&meal=${meal}`; 
 
     var temp = await axios.get(api_root_temp, body);
     console.log(temp.data);
@@ -42,7 +42,7 @@ async function getFoodById(id, user_id, token){
         }
     };
 
-    const api_root_temp = `http://localhost:1729/food?user_id=${user_id}&id=${id}`;
+    const api_root_temp = `https://mess-app-api-k5iz.vercel.app/food?user_id=${user_id}&id=${id}`;
 
     var temp = await axios.get(api_root_temp, body);
     
@@ -60,7 +60,7 @@ async function updateRating(food_id, user_id, rating, token){
 
     console.log(body);
 
-    const api_ = `http://localhost:1729/update_rating?food_id=${food_id}&user_id=${user_id}&rating=${rating}`
+    const api_ = `https://mess-app-api-k5iz.vercel.app/update_rating?food_id=${food_id}&user_id=${user_id}&rating=${rating}`
 
     var temp = await axios.post(api_, {}, body);
     
