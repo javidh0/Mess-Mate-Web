@@ -16,7 +16,7 @@ import axios from "axios";
 //     }
 // }
 
-const api_root = "http://localhost:1729/";
+const api_root = "https://mess-app-api.vercel.app/";
 
 async function loginApi(user_id, password){
     var body = {
